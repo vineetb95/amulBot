@@ -12,7 +12,8 @@ const productNames: string[] = [
     'Amul Chocolate Whey Protein Gift Pack, 34 g | Pack of 10 sachets',
     'Amul Chocolate Whey Protein, 34 g | Pack of 30 sachets',
     'Amul Chocolate Whey Protein, 34 g | Pack of 60 sachets',
-    'Amul High Protein Paneer, 400 g | Pack of 24'
+    'Amul High Protein Paneer, 400 g | Pack of 24',
+    'Amul High Protein Plain Lassi, 200 mL | Pack of 30'
 ];
 
 let timeSinceEverythingWentOutOfStock = Date.now() - 24 * 60 * 60 * 1000 + 20 * 1000;
