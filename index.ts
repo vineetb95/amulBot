@@ -21,6 +21,7 @@ const productNames: string[] = [
 let timeSinceEverythingWentOutOfStock = Date.now() - 24 * 60 * 60 * 1000 + 20 * 1000;
 
 setInterval(async () => {
+    sendTelegramMessage('Interval started!');
     // send request to amul
     let response: AxiosResponse;
     try {

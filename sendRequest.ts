@@ -27,5 +27,5 @@ const headers = {
 };
 
 export async function makeRequest() {
-    return await axios.get(url, { headers });
+    return await axios.get(url, { headers, timeout: 10 * 1000 });
 }
