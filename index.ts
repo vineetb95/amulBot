@@ -19,10 +19,9 @@ const productNames: string[] = [
     'Amul Kool Protein Milkshake | Chocolate, 180 mL | Pack of 30',
 ];
 
-let timeSinceEverythingWentOutOfStock = Date.now() - 24 * 60 * 60 * 1000 + 20 * 1000;
+let timeSinceEverythingWentOutOfStock = -1;
 
 async function pollAmulApi() {
-    sendTelegramMessage('Interval started!');
     // send request to amul
     let response: AxiosResponse;
     try {
@@ -58,7 +57,7 @@ async function pollAmulApi() {
         return;
     }
 
-    if (timeSinceEverythingWentOutOfStock == -1) {
+    if (timeSinceEverythingWentOutOfStock === -1) {
         timeSinceEverythingWentOutOfStock = Date.now();
         return;
     }
