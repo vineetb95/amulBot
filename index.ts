@@ -67,6 +67,7 @@ async function pollAmulApi() {
 
 let timeout = setTimeout(main, 10 * 1000);
 async function main() {
+    sendTelegramMessage('Beginning to poll!')
     await pollAmulApi();
     clearTimeout(timeout);
 
