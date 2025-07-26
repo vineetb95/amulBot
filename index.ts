@@ -82,14 +82,16 @@ setInterval(async () => {
 
 // Handle graceful shutdown and unexpected errors
 const notifyAndExit = async (reason: string) => {
-    try {
-        console.error(`Bot process crashed: reason: ${reason}`);
-        await sendTelegramMessage(`Bot process crashed: reason: ${reason}`);
-    } catch (e) {
-        console.error('Failed to send shutdown message:', e);
-    } finally {
+    console.error(`Bot process crashed: reason: ${reason}`);
+    await sendTelegramMessage(`Bot process crashed: reason: ${reason}`);
+
+    if (reason.includes('Error: 409: Conflict: terminated by other getUpdates request')) {
+        // Don't exit because gcp expects the app to not crash
+        // process.exit(0);
+    } else {
         process.exit(1);
     }
+
 };
 
 process.on('SIGINT', () => notifyAndExit('SIGINT (Ctrl+C) received'));
