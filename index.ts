@@ -4,6 +4,7 @@ dotenv.config();
 
 import { sendTelegramMessage } from "./telegram";
 import { AxiosResponse } from "axios";
+import express from 'express';
 
 const productNames: string[] = [
     'Amul Whey Protein Gift Pack, 32 g | Pack of 10 sachets',
@@ -13,7 +14,8 @@ const productNames: string[] = [
     'Amul Chocolate Whey Protein, 34 g | Pack of 30 sachets',
     'Amul Chocolate Whey Protein, 34 g | Pack of 60 sachets',
     'Amul High Protein Paneer, 400 g | Pack of 24',
-    'Amul High Protein Plain Lassi, 200 mL | Pack of 30'
+    'Amul High Protein Plain Lassi, 200 mL | Pack of 30',
+    'Amul High Protein Paneer, 400 g | Pack of 2'
 ];
 
 let timeSinceEverythingWentOutOfStock = Date.now() - 24 * 60 * 60 * 1000 + 20 * 1000;
@@ -87,3 +89,14 @@ process.on('SIGINT', () => notifyAndExit('SIGINT (Ctrl+C) received'));
 process.on('SIGTERM', () => notifyAndExit('SIGTERM received'));
 process.on('uncaughtException', (err) => notifyAndExit(`Uncaught Exception: ${err}`));
 process.on('unhandledRejection', (reason) => notifyAndExit(`Unhandled Rejection: ${reason}`));
+
+const app = express();
+const PORT = process.env.PORT || 8080;
+
+app.get('/', (req, res) => {
+    res.send('AmulBot is running!');
+});
+
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+});
