@@ -1,4 +1,4 @@
-import { makeRequest } from "./sendRequest";
+import { makeRequestWithRetries } from "./sendRequest";
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -25,7 +25,7 @@ async function pollAmulApi() {
     // send request to amul
     let response: AxiosResponse;
     try {
-        response = await makeRequest()
+        response = await makeRequestWithRetries()
     } catch (err) {
         console.log('Error occurred while making request to amul api');
         console.log(err);
