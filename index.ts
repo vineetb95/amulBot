@@ -20,7 +20,7 @@ const productNames: string[] = [
 
 let timeSinceEverythingWentOutOfStock = Date.now() - 24 * 60 * 60 * 1000 + 20 * 1000;
 
-setInterval(async () => {
+async function pollAmulApi() {
     sendTelegramMessage('Interval started!');
     // send request to amul
     let response: AxiosResponse;
@@ -66,7 +66,15 @@ setInterval(async () => {
         await sendTelegramMessage('Everything is out of stock for last 24 hrs!');
         timeSinceEverythingWentOutOfStock = Date.now();
     }
-}, 10 * 1000)
+}
+
+let timeout = setTimeout(main, 10 * 1000);
+async function main() {
+    await pollAmulApi();
+    clearTimeout(timeout);
+
+    timeout = setTimeout(main, 10 * 1000);
+}
 
 // every 24 hrs send a health check to telegram
 setInterval(async () => {
