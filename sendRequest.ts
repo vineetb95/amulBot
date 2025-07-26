@@ -36,7 +36,7 @@ export async function makeRequestWithRetries() {
     try {
       return await axios.get(url, { headers, timeout: 10 * 1000 });
     } catch (err) {
-      console.log('Error caught in catch block: ', err);
+      console.log('Error caught in catch block: ', err.message);
       if (err.message.includes('timeout') && err.message.includes('exceeded')) {
         console.error('Error: axios request timeout exceeded!');
         console.error('Retrying...')

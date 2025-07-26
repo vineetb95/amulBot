@@ -28,7 +28,7 @@ async function pollAmulApi() {
         response = await makeRequestWithRetries()
     } catch (err) {
         console.log('Error occurred while making request to amul api');
-        console.log(err);
+        console.log(err.message);
         await sendTelegramMessage(`Err: ${err.toString()}, cause: ${err.cause}, message: ${err.message}`);
         process.exit(1);
     }
