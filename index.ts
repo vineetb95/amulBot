@@ -1,0 +1,88 @@
+import { makeRequest } from "./sendRequest";
+import dotenv from 'dotenv';
+dotenv.config();
+
+import { sendTelegramMessage } from "./telegram";
+import { AxiosResponse } from "axios";
+
+const productNames: string[] = [
+    'Amul Whey Protein Gift Pack, 32 g | Pack of 10 sachets',
+    'Amul Whey Protein, 32 g | Pack of 30 Sachets',
+    'Amul Whey Protein, 32 g | Pack of 60 Sachets',
+    'Amul Chocolate Whey Protein Gift Pack, 34 g | Pack of 10 sachets',
+    'Amul Chocolate Whey Protein, 34 g | Pack of 30 sachets',
+    'Amul Chocolate Whey Protein, 34 g | Pack of 60 sachets',
+    'Amul High Protein Paneer, 400 g | Pack of 24'
+];
+
+let timeSinceEverythingWentOutOfStock = Date.now() - 24 * 60 * 60 * 1000 + 20 * 1000;
+
+setInterval(async () => {
+    // send request to amul
+    let response: AxiosResponse;
+    try {
+        response = await makeRequest()
+    } catch (err) {
+        console.log('Error occurred while making request to amul api');
+        console.log(err);
+        await sendTelegramMessage(`Err: ${err.toString()}, cause: ${err.cause}, message: ${err.message}`);
+        process.exit(1);
+    }
+
+    let productDataArr: { name: string, available: number }[] = response.data.data;
+
+    for (const productData of productDataArr) {
+        const { available, name } = productData;
+        if (productNames.includes(name) && available === 1) {
+            console.log(`${name} is available! sending notification...`);
+            await sendTelegramMessage(`${name} is available to buy!`);
+        }
+
+        if (name.includes('whey') || name.includes('Whey') && available === 1) {
+            await sendTelegramMessage(`${name} is available to buy!`);
+        }
+    }
+
+    let isEverythingOutOfStock = true;
+    for (const { available } of productDataArr) {
+        isEverythingOutOfStock = isEverythingOutOfStock && available == 0;
+    }
+
+    if (!isEverythingOutOfStock) {
+        timeSinceEverythingWentOutOfStock = -1;
+        return;
+    }
+
+    if (timeSinceEverythingWentOutOfStock == -1) {
+        timeSinceEverythingWentOutOfStock = Date.now();
+        return;
+    }
+
+    if (Date.now() - timeSinceEverythingWentOutOfStock > 1000 * 60 * 60 * 24) {
+        await sendTelegramMessage('Everything is out of stock for last 24 hrs!');
+        timeSinceEverythingWentOutOfStock = Date.now();
+    }
+}, 10 * 1000)
+
+// every 24 hrs send a health check to telegram
+setInterval(async () => {
+    await sendTelegramMessage('Telegram bot is healthy!')
+}, 24*60*60*1000);
+
+
+// Handle graceful shutdown and unexpected errors
+const notifyAndExit = async (reason: string) => {
+    try {
+        console.error(`Bot process crashed: reason: ${reason}`);
+        await sendTelegramMessage(`Bot process crashed: reason: ${reason}`);
+    } catch (e) {
+        console.error('Failed to send shutdown message:', e);
+    } finally {
+        process.exit(1);
+    }
+};
+
+process.on('SIGINT', () => notifyAndExit('SIGINT (Ctrl+C) received'));
+process.on('SIGTERM', () => notifyAndExit('SIGTERM received'));
+process.on('uncaughtException', (err) => notifyAndExit(`Uncaught Exception: ${err}`));
+process.on('unhandledRejection', (reason) => notifyAndExit(`Unhandled Rejection: ${reason}`));
