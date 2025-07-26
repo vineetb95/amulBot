@@ -16,6 +16,7 @@ const productNames: string[] = [
     'Amul Chocolate Whey Protein, 34 g | Pack of 30 sachets',
     'Amul Chocolate Whey Protein, 34 g | Pack of 60 sachets',
     'Amul High Protein Plain Lassi, 200 mL | Pack of 30',
+    'Amul Kool Protein Milkshake | Chocolate, 180 mL | Pack of 30'
 ];
 
 let timeSinceEverythingWentOutOfStock = -1;
@@ -67,15 +68,20 @@ async function pollAmulApi() {
     }
 }
 
-let timeout = setTimeout(main, 10 * 1000);
 async function main() {
     await entryfileStartedMsgPromise;
-    await sendTelegramMessage('Beginning to poll!')
-    await pollAmulApi();
-    clearTimeout(timeout);
 
-    timeout = setTimeout(main, 10 * 1000);
+    await sendTelegramMessage('Beginning to poll!')
+    let timeout = setTimeout(pollHelper, 10 * 1000);
+
+    async function pollHelper() {
+        await pollAmulApi();
+        clearTimeout(timeout);
+        timeout = setTimeout(pollHelper, 10 * 1000);
+    }
 }
+
+main();
 
 // every 24 hrs send a health check to telegram
 setInterval(async () => {
