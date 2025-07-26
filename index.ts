@@ -6,6 +6,8 @@ import { sendTelegramMessage } from "./telegram";
 import { AxiosResponse } from "axios";
 import express from 'express';
 
+let entryfileStartedMsgPromise = sendTelegramMessage('Bot process entryfile started running!');
+
 const productNames: string[] = [
     'Amul Whey Protein Gift Pack, 32 g | Pack of 10 sachets',
     'Amul Whey Protein, 32 g | Pack of 30 Sachets',
@@ -67,7 +69,8 @@ async function pollAmulApi() {
 
 let timeout = setTimeout(main, 10 * 1000);
 async function main() {
-    sendTelegramMessage('Beginning to poll!')
+    await entryfileStartedMsgPromise;
+    await sendTelegramMessage('Beginning to poll!')
     await pollAmulApi();
     clearTimeout(timeout);
 
