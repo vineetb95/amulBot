@@ -15,8 +15,13 @@ const productNames: string[] = [
     // 'Amul Chocolate Whey Protein Gift Pack, 34 g | Pack of 10 sachets',
     'Amul Chocolate Whey Protein, 34 g | Pack of 30 sachets',
     'Amul Chocolate Whey Protein, 34 g | Pack of 60 sachets',
-    'Amul High Protein Plain Lassi, 200 mL | Pack of 30'
+    'Amul High Protein Plain Lassi, 200 mL | Pack of 30' 
 ];
+
+const bannedProducts: string[] = [
+    'Amul Whey Protein Gift Pack, 32 g | Pack of 10 sachets',
+    'Amul Chocolate Whey Protein Gift Pack, 34 g | Pack of 10 sachets',
+]
 
 let timeSinceEverythingWentOutOfStock = -1;
 
@@ -36,6 +41,10 @@ async function pollAmulApi() {
 
     for (const productData of productDataArr) {
         const { available, name } = productData;
+        if (bannedProducts.includes(name)) {
+            continue;
+        }
+
         if (productNames.includes(name) && available === 1) {
             console.log(`${name} is available! sending notification...`);
             await sendTelegramMessage(`${name} is available to buy!`);
