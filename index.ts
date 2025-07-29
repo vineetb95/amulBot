@@ -9,13 +9,13 @@ import express from 'express';
 let entryfileStartedMsgPromise = sendTelegramMessage('Bot process entryfile started running!');
 
 const productNames: string[] = [
-    'Amul Whey Protein Gift Pack, 32 g | Pack of 10 sachets',
+    // 'Amul Whey Protein Gift Pack, 32 g | Pack of 10 sachets',
     'Amul Whey Protein, 32 g | Pack of 30 Sachets',
     'Amul Whey Protein, 32 g | Pack of 60 Sachets',
-    'Amul Chocolate Whey Protein Gift Pack, 34 g | Pack of 10 sachets',
+    // 'Amul Chocolate Whey Protein Gift Pack, 34 g | Pack of 10 sachets',
     'Amul Chocolate Whey Protein, 34 g | Pack of 30 sachets',
     'Amul Chocolate Whey Protein, 34 g | Pack of 60 sachets',
-    // 'Amul High Protein Plain Lassi, 200 mL | Pack of 30' // bought
+    'Amul High Protein Plain Lassi, 200 mL | Pack of 30'
 ];
 
 let timeSinceEverythingWentOutOfStock = -1;
