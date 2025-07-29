@@ -15,7 +15,9 @@ const productNames: string[] = [
     // 'Amul Chocolate Whey Protein Gift Pack, 34 g | Pack of 10 sachets',
     'Amul Chocolate Whey Protein, 34 g | Pack of 30 sachets',
     'Amul Chocolate Whey Protein, 34 g | Pack of 60 sachets',
-    'Amul High Protein Plain Lassi, 200 mL | Pack of 30' 
+    'Amul High Protein Plain Lassi, 200 mL | Pack of 30',
+    'Amul High Protein Buttermilk, 200 mL | Pack of 30',
+    'Amul High Protein Rose Lassi, 200 mL | Pack of 30'
 ];
 
 const bannedProducts: string[] = [
